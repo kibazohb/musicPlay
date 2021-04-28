@@ -8,7 +8,7 @@ const JavaScriptObfuscator = require("javascript-obfuscator");
 require('dotenv').config()
 
 //start database connection
-import { db } from './src/config/db.ts';
+import { db } from './config/db';
 const startDbConnection = async () => db.createConnection();
 startDbConnection();
 

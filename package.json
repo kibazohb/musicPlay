@@ -20,7 +20,7 @@
     "path": "^0.12.7"
   },
   "scripts": {
-    "dev": "ts-node-dev app.js",
+    "dev": "ts-node-dev src/app.js",
     "start": "nodemon app.js"
   },
   "devDependencies": {

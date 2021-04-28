@@ -20,10 +20,14 @@ class db {
       console.log(err.message)
     });
 
-      await mongoose.connection.on('connected', ()=>{
+      // await mongoose.connection.on('connected', ()=>{
+      //   console.log("Mongoose connected to database")
+      // })
+
+      await mongoose.connection.on('disconnected', ()=>{
         console.log("Mongoose connected to database")
-        
       })
+
     } catch (error) {
       console.log(error);
       process.exit(1);
