@@ -7,6 +7,11 @@ const JavaScriptObfuscator = require("javascript-obfuscator");
 
 require('dotenv').config()
 
+//start database connection
+import { db } from './src/config/db.ts';
+const startDbConnection = async () => db.createConnection();
+startDbConnection();
+
 const app = express()
 
 app.use(morgan('dev'))
