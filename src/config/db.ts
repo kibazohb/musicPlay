@@ -9,7 +9,25 @@ class db {
         console.error("The mongoURI was not set in the env variables");
         process.exit(1);
       }
-      await mongoose.connect(mongooseUrl);
+      await mongoose.connect(mongooseUrl, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
+    }).then(()=>{
+      console.log("MongoDB is connected")
+    }).catch(err => {
+      console.log(err.message)
+    });
+
+      // await mongoose.connection.on('connected', ()=>{
+      //   console.log("Mongoose connected to database")
+      // })
+
+      await mongoose.connection.on('disconnected', ()=>{
+        console.log("Mongoose connected to database")
+      })
+
     } catch (error) {
       console.log(error);
       process.exit(1);
