@@ -1,12 +1,12 @@
 import mongoose, { Schema, Document } from "mongoose";
 const bcrypt = require("bcrypt");
 
-// export interface IUser extends Document {
-//   email: string;
-//   firstName: string;
-//   lastName: string;
-//   password: string;
-// }
+export interface IUser extends Document {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+}
 
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
-UserSchema.pre("save", async function (next) {
+UserSchema.pre<IUser>("save", async function (next) {
   try {
     const salt = await bcrypt.genSalt(12);
     const newPassword = await bcrypt.hash(this.password, salt);
@@ -35,5 +35,5 @@ UserSchema.methods.isValidPassword = async function(password) {
 }
 
 // Export the model and return your IUser interface
-const User = mongoose.model("user", UserSchema);
+const User = mongoose.model<IUser>("user", UserSchema);
 module.exports = User;
