@@ -19,6 +19,25 @@ module.exports = {
         })
     },
 
+    verifyAccessTokens: (req, res, next)=>{
+        if(!req.headers['authorization']) return next(createError.Unauthorized('missing headers'))
+
+        const header = req.headers['authorization']
+        const bearerToken = header.split(' ')
+        const token = bearerToken[1]
+
+        JWT.verify(token, process.env.ACCESS_TOKEN_SECRET + ' ', (err, payload)=>{
+            if(!err){
+                console.log(payload);
+                req.payload = payload
+                next()
+            }else{
+                const message = err.name === 'JsonWebTokenError' ? 'Unauthorized' : err.message
+                return next(createError.Unauthorized(message))
+            }
+        })
+    },
+
     refreshTokens: (userID) =>{
         return new Promise((res, rej) => {
             const payload = {}
@@ -36,7 +55,15 @@ module.exports = {
         })
     }, 
 
-    verifyRefreshTokens : (userID) => {
-        return new Promise()
+    verifyRefreshTokens : (refreshToken) => {
+        // return new Promise((res, rej)=>{
+        //     const secret = process.env.REFRESH_TOKEN_SECRET
+
+        //     JWT.verify(refreshTokens, secret, (err, payload) =>{
+        //         if(!err){
+        //             const userID = 
+        //         }
+        //     })
+        // })
     }
 }

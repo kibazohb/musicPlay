@@ -7,6 +7,8 @@ const JavaScriptObfuscator = require("javascript-obfuscator");
 
 const AuthRoute = require("./routes/authRoute");
 
+const {verifyAccessTokens} = require('./extras/jwtTokens')
+
 require("dotenv").config();
 
 //start database connection
@@ -20,7 +22,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", function (req, res) {
+app.get("/", verifyAccessTokens, function (req, res) {
   res.sendFile(path.join(__dirname.replace('src', '') + "/public/index.html"));
 });
 
