@@ -21,19 +21,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname + "/public/index.html"));
+  res.sendFile(path.join(__dirname.replace('src', '') + "/public/index.html"));
 });
 
 // Send Style, do not change
 app.get("/style.css", function (req, res) {
   //Feel free to change the contents of style.css to prettify your Web app
-  res.sendFile(path.join(__dirname + "/public/style.css"));
+  res.sendFile(path.join(__dirname.replace('src', '') + "/public/styles.css"));
 });
 
 // Send obfuscated JS, do not change
 app.get("/index.js", function (req, res) {
   fs.readFile(
-    path.join(__dirname + "/public/index.js"),
+    path.join(__dirname.replace('src', '') + "/public/index.js"),
     "utf8",
     function (err, contents) {
       const minimizedContents = JavaScriptObfuscator.obfuscate(contents, {
