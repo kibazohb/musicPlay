@@ -12,3 +12,16 @@ Content-Type: application/json
         "lastName":"kiba"
     }
 }
+
+####login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "user": {
+        "email":"briankib@gmail.com",
+        "password":"helloworld",
+        "firstName":"123",
+        "lastName":"kiba"
+    }
+}

@@ -7,12 +7,11 @@ module.exports = {
     register: async(req, res, next)=>{
         try{
             const guest = await registerAuthSchema.validateAsync(req.body.user)
-            console.log(User);
 
             const doesUserExist = await User.findOne({email:guest.email})
 
             if(doesUserExist){
-                throw createError.Conflict(`${guest.email} has laready been registered`)
+                throw createError.Conflict(`${guest.email} has already been registered`)
             }
 
             const newUser = new User(guest)
@@ -32,6 +31,29 @@ module.exports = {
     },
 
     login: async(req, res, next) => {
+        try{
+            const guest = await registerAuthSchema.validateAsync(req.body.user)
 
+            const foundUser = await User.findOne({email:guest.email})
+
+            if(!foundUser){
+                throw createError.NotFound(`${guest.email} is not registered`)
+            }
+
+            const isPasswordMatching = await foundUser.isValidPassword(guest.password)
+
+            if(!isPasswordMatching){
+                throw createError.Unauthorized('Invalid Username or Password')
+            }
+
+            const accessToken = await signinAccessToken(foundUser.id)
+            const refreshToken = await refreshTokens(foundUser.id)
+            res.send({accessToken, refreshToken})
+        }catch(err){
+            if(err.isJoi){
+                return next(createError.BadReqest("Invalid Username or Password"))
+            }
+            next(err)
+        }
     }
 }
