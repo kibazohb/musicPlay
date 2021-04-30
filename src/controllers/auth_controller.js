@@ -1,7 +1,7 @@
 const User = require('../models/User')
 const createError = require('http-errors')
 const {registerAuthSchema} = require('../extras/joiValidationSchema')
-const {signinAccessToken} = require('../extras/jwtTokens')
+const {signinAccessToken, refreshTokens} = require('../extras/jwtTokens')
 
 module.exports = {
     register: async(req, res, next)=>{
@@ -19,7 +19,8 @@ module.exports = {
             const saved = await newUser.save()
 
             const accessToken = await signinAccessToken(saved.id)
-            res.send({accessToken})
+            const refreshToken = await refreshTokens(saved.id)
+            res.send({accessToken, refreshToken})
         }catch(error){
             
             // JOI is a powerful schema description language and data validator
