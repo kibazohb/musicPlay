@@ -56,14 +56,18 @@ module.exports = {
     }, 
 
     verifyRefreshTokens : (refreshToken) => {
-        // return new Promise((res, rej)=>{
-        //     const secret = process.env.REFRESH_TOKEN_SECRET
+        return new Promise((res, rej)=>{
+            const secret = process.env.REFRESH_TOKEN_SECRET
 
-        //     JWT.verify(refreshTokens, secret, (err, payload) =>{
-        //         if(!err){
-        //             const userID = 
-        //         }
-        //     })
-        // })
+            JWT.verify(refreshToken, secret, (err, payload) =>{
+                if(!err){
+                    const userID = payload.aud
+                    res(userID)
+                }else{
+                    console.log(err.message);
+                    rej(createError.Unauthorized())
+                }
+            })
+        })
     }
 }
