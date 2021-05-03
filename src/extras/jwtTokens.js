@@ -1,5 +1,6 @@
 const JWT = require('jsonwebtoken')
 const createError = require('http-errors')
+const client = require('../config/redis')
 
 module.exports = {
     signinAccessToken: (userID)=>{
@@ -43,26 +44,45 @@ module.exports = {
             const payload = {}
             const secret = process.env.REFRESH_TOKEN_SECRET
             const options = {expiresIn: "1y", audience: userID}
-
+            
             JWT.sign(payload, secret, options, (err, token)=>{
                 if(err){
                     console.log(err.message);
                     rej(createError.InternalServerError())
                 }else{
-                    res(token)
+                    client.SET(userID, token, 'EX', 365 * 24 * 60 * 60, (err, reply) => {
+                        if (err) {
+                            console.log(err.message);
+                            rej(createError.InternalServerError())
+                            return;
+                        }
+                        res(token)
+                    })
                 }
             })
         })
     }, 
 
     verifyRefreshTokens : (refreshToken) => {
-        return new Promise((res, rej)=>{
+        return new Promise((resolve, reject)=>{
             const secret = process.env.REFRESH_TOKEN_SECRET
 
             JWT.verify(refreshToken, secret, (err, payload) =>{
                 if(!err){
                     const userID = payload.aud
-                    res(userID)
+                    client.get(userID, (err, res) => {
+                        if (err) {
+                            console.log(err.message);
+                            reject(createError.InternalServerError())
+                            return;
+                        } else {
+                            if (refreshToken === res) {
+                                return resolve(userID)
+                            } else {
+                                reject(createError.Unauthorized())
+                            }
+                        }
+                    })
                 }else{
                     console.log(err.message);
                     rej(createError.Unauthorized())
