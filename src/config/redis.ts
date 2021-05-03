@@ -10,7 +10,7 @@ client.on('connect', () => {
     console.log('Client got connected', new Date().toLocaleTimeString());
 })
 
-client.on('error', (err) => {
+client.on('error', (err: any) => {
     console.log(err.message);
 })
 
