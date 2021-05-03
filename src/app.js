@@ -13,8 +13,13 @@ require("dotenv").config();
 
 //start database connection
 import { db } from "./config/db";
+import {redis_cache} from './config/redis' 
+
 const startDbConnection = async () => db.createConnection();
+const startRedisConnection = async ()=> redis_cache.createConnection()
+
 startDbConnection();
+startRedisConnection();
 
 const app = express();
 
