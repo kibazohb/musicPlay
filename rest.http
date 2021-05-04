@@ -33,5 +33,14 @@ Content-Type: application/json
 
 {
     "refreshToken":
-     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MjAwODM4NTMsImV4cCI6MTY1MTY0MTQ1MywiYXVkIjoiNjA4YzUyN2NjMDg0MWJkODJjODQyNzhjIn0.gO9wEdqWc31Vs021yL75r9AjiMNun0ZsvZi4K1Mop5I"
+     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MjAxMzk2MjQsImV4cCI6MTY1MTY5NzIyNCwiYXVkIjoiNjA4YzUyN2NjMDg0MWJkODJjODQyNzhjIn0.qAsqBrDIeQWAHmBeq57InGdBNq70uaZAek0m6gPDyT8"
+}
+
+####logout
+POST http://localhost:3000/auth/logout
+Content-Type: application/json
+
+{
+    "refreshToken":
+     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MjAxMzk2MjQsImV4cCI6MTY1MTY5NzIyNCwiYXVkIjoiNjA4YzUyN2NjMDg0MWJkODJjODQyNzhjIn0.qAsqBrDIeQWAHmBeq57InGdBNq70uaZAek0m6gPDyT8"
 }

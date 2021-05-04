@@ -6,6 +6,7 @@ const {
   refreshTokens,
   verifyRefreshTokens,
 } = require("../extras/jwtTokens");
+const client = require('../config/redis')
 
 module.exports = {
   register: async (req, res, next) => {
@@ -78,8 +79,30 @@ module.exports = {
         const newToken = await refreshTokens(userID);
         console.log({ newToken, accessToken });
 
-        res.send({accessToken, newToken});
+        res.send({ accessToken, newToken });
       }
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  logout: async (req, res, next) => {
+    try {
+      const { refreshToken } = req.body;
+
+      if (!refreshToken) {
+        throw createError.BadReqest()
+      }
+
+      const userID = await verifyRefreshTokens(refreshToken)
+      client.DEL(userID, (err, reply) =>{
+        if(err){
+          console.log(err.message);
+          throw createError.InternalServerError()
+        }
+
+        res.sendStatus(204)
+      })
     } catch (err) {
       next(err);
     }
